@@ -2,11 +2,10 @@ require 'formula'
 
 class Gnuradio < Formula
   homepage 'http://gnuradio.org'
-  url  'http://gnuradio.org/releases/gnuradio/gnuradio-3.7.2.1.tar.gz'
-  sha1 '33f18b6837dfee9d69b7799a48b4815288d4c5f9'
+  url  'http://gnuradio.org/releases/gnuradio/gnuradio-3.7.3.tar.gz'
+  sha1 'bf208448cbeca8ac1dabca9bbd6fa3f2185a9582'
   head 'http://gnuradio.org/git/gnuradio.git'
 
-  depends_on 'apple-gcc42' => :build
   depends_on 'cmake' => :build
   depends_on 'Cheetah' => :python
   depends_on 'lxml' => :python
@@ -15,14 +14,13 @@ class Gnuradio < Formula
   depends_on 'matplotlib' => :python
   depends_on 'python'
   depends_on 'boost'
-  depends_on 'cppunit'
   depends_on 'gsl'
   depends_on 'fftw'
   depends_on 'swig'
   depends_on 'pygtk'
   depends_on 'sdl'
 
-  depends_on 'libusbx'
+  depends_on 'libusb'
   depends_on 'orc'
   depends_on 'pyqt' if ARGV.include?('--with-qt')
   depends_on 'pyqwt' if ARGV.include?('--with-qt')
@@ -40,21 +38,18 @@ class Gnuradio < Formula
     ]
   end
 
-  def patches
-    DATA
-  end
+  #def patches
+  #  DATA
+  #end
 
   def install
-
-	  # Force compilation with gcc-4.2
-	  ENV['CC'] = '/usr/local/bin/gcc-4.2'
-	  ENV['LD'] = '/usr/local/bin/gcc-4.2'
-	  ENV['CXX'] = '/usr/local/bin/g++-4.2'
 
     mkdir 'build' do
       args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers"] + std_cmake_args
       args << '-DENABLE_GR_QTGUI=OFF' unless ARGV.include?('--with-qt')
       args << '-DENABLE_DOXYGEN=OFF' unless ARGV.include?('--with-docs')
+      args << '-DCMAKE_CXX_FLAGS=-std=c++11 -stdlib=libc++ -Wno-narrowing'
+      args << '-DCMAKE_CXX_LINK_FLAGS=-stdlib=libc++'
 
       # From opencv.rb
       python_prefix = `python-config --prefix`.strip
@@ -107,16 +102,3 @@ class Gnuradio < Formula
 end
 
 __END__
-diff --git a/grc/CMakeLists.txt b/grc/CMakeLists.txt
-index f54aa4f..db0ce3c 100644
---- a/grc/CMakeLists.txt
-+++ b/grc/CMakeLists.txt
-@@ -25,7 +25,7 @@ include(GrPython)
- GR_PYTHON_CHECK_MODULE("python >= 2.5"     sys          "sys.version.split()[0] >= '2.5'"           PYTHON_MIN_VER_FOUND)
- GR_PYTHON_CHECK_MODULE("Cheetah >= 2.0.0"  Cheetah      "Cheetah.Version >= '2.0.0'"                CHEETAH_FOUND)
- GR_PYTHON_CHECK_MODULE("lxml >= 1.3.6"     lxml.etree   "lxml.etree.LXML_VERSION >= (1, 3, 6, 0)"   LXML_FOUND)
--GR_PYTHON_CHECK_MODULE("pygtk >= 2.10.0"   gtk          "gtk.pygtk_version >= (2, 10, 0)"           PYGTK_FOUND)
-+GR_PYTHON_CHECK_MODULE("pygtk >= 2.10.0"   pygtk        True                                        PYGTK_FOUND)
- GR_PYTHON_CHECK_MODULE("numpy"             numpy        True                                        NUMPY_FOUND)
- 
- ########################################################################
