@@ -38,9 +38,9 @@ class Gnuradio < Formula
     ]
   end
 
-  #def patches
-  #  DATA
-  #end
+  def patches
+    DATA
+  end
 
   def install
 
@@ -102,3 +102,17 @@ class Gnuradio < Formula
 end
 
 __END__
+diff --git a/grc/CMakeLists.txt b/grc/CMakeLists.txt
+ index f54aa4f..db0ce3c 100644
+ --- a/grc/CMakeLists.txt
+ +++ b/grc/CMakeLists.txt
+@@ -25,7 +25,7 @@ include(GrPython)
+ GR_PYTHON_CHECK_MODULE("python >= 2.5"     sys          "sys.version.split()[0] >= '2.5'"           PYTHON_MIN_VER_FOUND)
+ GR_PYTHON_CHECK_MODULE("Cheetah >= 2.0.0"  Cheetah      "Cheetah.Version >= '2.0.0'"                CHEETAH_FOUND)
+ GR_PYTHON_CHECK_MODULE("lxml >= 1.3.6"     lxml.etree   "lxml.etree.LXML_VERSION >= (1, 3, 6, 0)"   LXML_FOUND)
+-GR_PYTHON_CHECK_MODULE("pygtk >= 2.10.0"   gtk          "gtk.pygtk_version >= (2, 10, 0)"           PYGTK_FOUND)
++GR_PYTHON_CHECK_MODULE("pygtk >= 2.10.0"   pygtk        True                                        PYGTK_FOUND)
+ GR_PYTHON_CHECK_MODULE("numpy"             numpy        True                                        NUMPY_FOUND)
+ 
+ ########################################################################
+
