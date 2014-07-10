@@ -8,7 +8,7 @@ class Bladerf < Formula
   depends_on 'automake' => :build
   depends_on 'libtool' => :build
   depends_on 'cmake' => :build
-  depends_on 'libusbx'
+  depends_on 'libusb'
 
   def install
     mkdir 'build' do
