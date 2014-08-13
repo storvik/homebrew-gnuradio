@@ -5,9 +5,7 @@ require 'formula'
 
 class Hackrf < Formula
   homepage 'https://github.com/mossmann/hackrf/wiki'
-  head 'https://github.com/mossmann/hackrf'
-  url  'https://github.com/mossmann/hackrf/archive/2013.06.1.tar.gz'
-  sha1 '4859b11d89048d83b22c279feb18b807156776ae'
+  head 'https://github.com/mossmann/hackrf.git'
 
   depends_on 'cmake' => :build
   depends_on 'libusb'
