@@ -16,38 +16,30 @@ class Gnuradio < Formula
   depends_on 'boost'
   depends_on 'gsl'
   depends_on 'fftw'
-  depends_on 'swig'
+  depends_on 'swig' => :build
   depends_on 'pygtk'
   depends_on 'sdl'
 
   depends_on 'libusb'
   depends_on 'orc'
-  depends_on 'pyqt' if ARGV.include?('--with-qt')
-  depends_on 'pyqwt' if ARGV.include?('--with-qt')
-  depends_on 'doxygen' if ARGV.include?('--with-docs')
+  depends_on 'pyqt' if build.with? 'qt'
+  depends_on 'pyqwt' if build.with? 'qt'
+  depends_on 'doxygen' if build.with? 'docs'
+
+  option 'with-qt', 'Build with Qt 4 or 5 support'
+  option 'with-docs', 'Build programming documentation(in API documentation) and html man page'
 
   fails_with :clang do
     build 421
     cause "Fails to compile .S files."
   end
 
-  def options
-    [
-      ['--with-qt', 'Build gr-qtgui.'],
-      ['--with-docs', 'Build docs.']
-    ]
-  end
-
-  #def patches
-  #  DATA
-  #end
-
   def install
 
     mkdir 'build' do
       args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers"] + std_cmake_args
-      args << '-DENABLE_GR_QTGUI=OFF' unless ARGV.include?('--with-qt')
-      args << '-DENABLE_DOXYGEN=OFF' unless ARGV.include?('--with-docs')
+      args << '-DENABLE_GR_QTGUI=OFF' if build.without? 'qt'
+      args << '-DENABLE_DOXYGEN=OFF' if build.without? 'docs'
       args << '-DCMAKE_CXX_FLAGS=-std=c++11 -stdlib=libc++ -Wno-narrowing'
       args << '-DCMAKE_CXX_LINK_FLAGS=-stdlib=libc++'
 
@@ -81,7 +73,7 @@ class Gnuradio < Formula
   end
 
   def python_path
-    python = Formula.factory('python')
+    python = Formula['python']
     kegs = python.rack.children.reject { |p| p.basename.to_s == '.DS_Store' }
     kegs.find { |p| Keg.new(p).linked? } || kegs.last
   end
@@ -100,5 +92,3 @@ class Gnuradio < Formula
     "python" + `python -c 'import sys;print(sys.version[:3])'`.strip
   end
 end
-
-__END__
