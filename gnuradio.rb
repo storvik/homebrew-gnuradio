@@ -2,8 +2,8 @@ require 'formula'
 
 class Gnuradio < Formula
   homepage 'http://gnuradio.org'
-  url  'http://gnuradio.org/releases/gnuradio/gnuradio-3.7.3.tar.gz'
-  sha1 'bf208448cbeca8ac1dabca9bbd6fa3f2185a9582'
+  url  'http://gnuradio.org/releases/gnuradio/gnuradio-3.7.5.tar.gz'
+  sha1 'fe30be815aca149bfac1615028a279aea40c3bbb'
   head 'http://gnuradio.org/git/gnuradio.git'
 
   depends_on 'cmake' => :build
@@ -34,13 +34,17 @@ class Gnuradio < Formula
     cause "Fails to compile .S files."
   end
 
+  def patches
+    DATA
+  end
+
   def install
 
     mkdir 'build' do
       args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers"] + std_cmake_args
       args << '-DENABLE_GR_QTGUI=OFF' if build.without? 'qt'
       args << '-DENABLE_DOXYGEN=OFF' if build.without? 'docs'
-      args << '-DCMAKE_CXX_FLAGS=-std=c++11 -stdlib=libc++ -Wno-narrowing'
+      args << '-DCMAKE_CXX_FLAGS=-std=c++11 -stdlib=libc++ -Wno-narrowing -Wno-static-float-init'
       args << '-DCMAKE_CXX_LINK_FLAGS=-stdlib=libc++'
 
       # From opencv.rb
@@ -92,3 +96,21 @@ class Gnuradio < Formula
     "python" + `python -c 'import sys;print(sys.version[:3])'`.strip
   end
 end
+
+__END__
+diff --git a/gr-fec/lib/cc_decoder_impl.cc b/gr-fec/lib/cc_decoder_impl.cc
+index 20587a2..f0d8cfd 100644
+--- a/gr-fec/lib/cc_decoder_impl.cc
++++ b/gr-fec/lib/cc_decoder_impl.cc
+@@ -147,8 +147,11 @@ namespace gr {
+           d_SUBSHIFT = 0;
+         }
+ 
++#if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
++        yp_kernel = {{"k=7r=2", volk_8u_x4_conv_k7_r2_8u}};
++#else
+         yp_kernel = boost::assign::map_list_of("k=7r=2", volk_8u_x4_conv_k7_r2_8u);
+-
++#endif
+         std::string k_ = "k=";
+         std::string r_ = "r=";
