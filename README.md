@@ -5,14 +5,7 @@ that makes it easier get GNU Radio and friends running on OS X.
 
 ## Installation
 
-These steps have been tested on Lion 10.8.5 with Xcode 5.0.2.
-
-- Add this line to your profile (ie `~/.bash_profile` or `~/.zshenv`) and reload
-  your shell (`exec $SHELL`)
-
-  ```sh
-  export PATH=/usr/local/bin:/usr/local/share/python:$PATH
-  ```
+These steps have been tested on Lion 10.9.4 with Xcode 5.1.
 
 - Install the python package prerequisites
 
@@ -31,7 +24,7 @@ These steps have been tested on Lion 10.8.5 with Xcode 5.0.2.
 - Install gnuradio (add `--with-qt` for `gr-qtgui`)
 
   ```sh
-  brew tap titanous/homebrew-gnuradio
+  brew tap ttrftech/homebrew-gnuradio
   brew install gnuradio
   ```
 - Create the `~/.gnuradio/config.conf` config file for custom block support
