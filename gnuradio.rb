@@ -6,6 +6,11 @@ class Gnuradio < Formula
   sha1 'fe30be815aca149bfac1615028a279aea40c3bbb'
   head 'http://gnuradio.org/git/gnuradio.git'
 
+  option 'with-qt', 'Build with Qt 4 or 5 support'
+  option 'with-wx', 'Build with WX gui toolkit support'
+  option 'with-zeromq', 'Build with zeromq support'
+  option 'with-docs', 'Build programming documentation(in API documentation) and html man page'
+
   depends_on 'cmake' => :build
   depends_on 'Cheetah' => :python
   depends_on 'lxml' => :python
@@ -24,10 +29,9 @@ class Gnuradio < Formula
   depends_on 'orc'
   depends_on 'pyqt' if build.with? 'qt'
   depends_on 'pyqwt' if build.with? 'qt'
+  depends_on 'wxpython' if build.with? 'wx'
+  depends_on 'cppzmq' if build.with? 'zeromq'
   depends_on 'doxygen' if build.with? 'docs'
-
-  option 'with-qt', 'Build with Qt 4 or 5 support'
-  option 'with-docs', 'Build programming documentation(in API documentation) and html man page'
 
   fails_with :clang do
     build 421
