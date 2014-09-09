@@ -8,9 +8,14 @@ class Bladerf < Formula
   depends_on 'automake' => :build
   depends_on 'libtool' => :build
   depends_on 'cmake' => :build
+  #depends_on 'pandoc' => :build
   depends_on 'libusb'
 
   def install
+    cd 'host/utilities/bladeRF-cli/src/cmd/doc' do
+      #system './generate.bash', 'interactive-help.md'
+      system 'cp', 'cmd_help.h.in', 'cmd_help.h'
+    end
     mkdir 'build' do
       system 'cmake', '..', *std_cmake_args
       system 'make'
