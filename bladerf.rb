@@ -1,7 +1,7 @@
 require 'formula'
 
 class Bladerf < Formula
-  homepage 'http://sdr.osmocom.org/trac/wiki/rtl-sdr'
+  homepage 'https://github.com/Nuand/bladeRF/wiki'
   head 'https://github.com/Nuand/bladeRF.git'
 
   depends_on 'pkg-config' => :build
