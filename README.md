@@ -1,45 +1,77 @@
 # homebrew-gnuradio
 
-This is a collection of [Homebrew](https://github.com/mxcl/homebrew) recipes
-that makes it easier get GNU Radio and friends running on OS X.
+This is a collection of [Homebrew](https://github.com/mxcl/homebrew) recipes that makes it easier to get GNU Radio, GQRX, HackRF, RTL-SDR and BladeRF running on OS X.
 
 ## Installation
 
-These steps have been tested on Lion 10.9.4 with Xcode 5.1.
+These steps have been tested on Mavericks 10.9.5 with Apple Command Line Tools 6.1.0.
+
+- Install [Homebrew](http://brew.sh/) if you haven't already
+
+  ```sh
+  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+  ```
+  or if you already have it installed, update and upgrade everything:
+  
+  ```sh
+  brew update
+  brew upgrade
+  ```
+
+- After that run the following commands to make sure you have no issues with your setup, cleanup all warnings
+
+  ```sh
+  brew doctor
+  ```
+
+- Add this line to your profile (ie `~/.profile` or `~/.bash_profile` or `~/.zshenv`) and reload
+  your profile (`source ~/.profile` or `exec $SHELL`)
+
+  ```sh
+  export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+  ```
 
 - Install the python package prerequisites
 
   ```sh
-  brew install python gfortran umfpack swig
+  brew install python gcc swig
   ```
 
 - Install the prerequisite python packages
 
   ```sh
   pip install numpy Cheetah lxml
-  pip install https://github.com/scipy/scipy/tarball/v0.11.0rc2
-  export PKG_CONFIG_PATH="/usr/x11/lib/pkgconfig" pip install http://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-1.1.1/matplotlib-1.1.1.tar.gz
+  pip install https://github.com/scipy/scipy/archive/v0.12.0.tar.gz
+  export PKG_CONFIG_PATH="/usr/X11/lib/pkgconfig" 
+  pip install https://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-1.2.1/matplotlib-1.2.1.tar.gz
   ```
 
-- Install gnuradio (add `--with-qt` for `gr-qtgui`)
-
-  ```sh
-  brew tap ttrftech/homebrew-gnuradio
-  brew install gnuradio
-  ```
-- Create the `~/.gnuradio/config.conf` config file for custom block support
-
-  ```ini
-  [grc]
-  global_blocks_path=/usr/local/share/gnuradio/grc/blocks
-  ```
-
-### Optional (for `gr-wxgui`)
-
-- Before installing `gnuradio`, install `wxmac` 2.9 with python bindings
+- Install `wxmac` 2.9 with python bindings
 
   ```sh
   brew install wxmac --python
+  ```
+
+- Install gnuradio 
+
+  ```sh
+  brew tap andresv/homebrew-gnuradio
+  brew install gnuradio --with-qt
+  ```
+
+- Create the `~/.gnuradio/config.conf` config file for custom block support and add this into it
+
+  ```ini
+  [grc]
+  local_blocks_path=/usr/local/share/gnuradio/grc/blocks
+  ```
+
+### Optional (for hackrf devices)
+
+- Install `hackrf` and related blocks
+
+  ```sh
+  brew install hackrf --HEAD gr-osmosdr gr-baz --HEAD
   ```
 
 ### Optional (for rtl-sdr devices)
@@ -47,7 +79,7 @@ These steps have been tested on Lion 10.9.4 with Xcode 5.1.
 - Install `rtlsdr` and related blocks
 
   ```sh
-  brew install rtlsdr gr-osmosdr --HEAD
+  brew install rtlsdr gr-osmosdr gr-baz --HEAD
   ```
 
 ### Optional (for bladerf devices)
@@ -56,4 +88,77 @@ These steps have been tested on Lion 10.9.4 with Xcode 5.1.
 
   ```sh
   brew install bladerf gr-osmosdr --HEAD
+  ```
+
+- If you want a graphic interface to play with your HackRF, GQRX is great
+  To install it:
+  
+  ```sh
+  brew install --HEAD gqrx
+  ```
+  
+  To run:
+  
+  ```sh
+  gqrx
+  ```
+  
+Configure it to use the HackRF. Probably best to start the sample rate at 1000000 until you know how much your system can handle.
+Everything should now be working. It is time to give it a try! Below are some of the programs you can try:
+
+```sh
+gnuradio-companion
+osmocom_fft -a hackrf
+```
+
+##Troubleshooting
+
+- **Matplotlib**
+
+  If you get the following type of errors installing matplotlib:
+
+  > error: expected identifier or '(' before '^' token
+    
+  Try the following:
+      
+  ```sh
+  export CC=clang
+  export CXX=clang++
+  export LDFLAGS="-L/usr/X11/lib"
+  export CFLAGS="-I/usr/X11/include -I/usr/X11/include/freetype2"
+  ```
+      
+  From [Stackoverflow](http://stackoverflow.com/questions/12363557/matplotlib-install-failure-on-mac-osx-10-8-mountain-lion/15098059#15098059) via [@savant42](https://twitter.com/savant42)
+
+- **gnuradio-companion**
+  
+  If gnuradio-companion crashes with following error (it happened with older 3.6.5.1 gnuradio), there must be something wrong with Python. Probably some of the libraries are still using system Python.
+
+  ```sh
+  Warning: Block with key "xmlrpc_server" already exists.
+  Ignoring: /usr/local/Cellar/gnuradio/3.6.5.1/share/gnuradio/grc/blocks/xmlrpc_server.xml
+  Fatal Python error: PyThreadState_Get: no current thread
+  Abort trap: 6
+  ```
+
+  To test this theory rename system python to something else and reinstall boost:
+
+  ```sh
+  sudo mv /System/Library/Frameworks/Python.framework/ /System/Library/Frameworks/Backup.Python.framework
+  brew reinstall boost
+  ```
+
+  I got it to work in this way. I have not renamed system Python back to original, however I guess it could be done after this step.
+
+- **Uninstall Homebrew**
+  If you think you have some cruftiness with Homebrew, this Gist will completely uninstall Homebrew and any libraries it may have installed. Of course if you are using Homebrew for other things you could make a mess of your life. 
+  
+  This [Gist](https://gist.github.com/mxcl/1173223) is from the [Homebrew FAQ](https://github.com/mxcl/homebrew/wiki/FAQ)
+  
+  Then finish the clean-up with these steps
+  
+  ```sh
+  rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
+  rm -rf /Library/Caches/Homebrew
+  rm -rf /usr/local/lib/python2.7/site-packages
   ```
