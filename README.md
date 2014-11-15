@@ -59,18 +59,23 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   brew install gnuradio --with-qt
   ```
 
-- Create the `~/.gnuradio/config.conf` config file for custom block support and add this into it
-
-  ```ini
-  [grc]
-  local_blocks_path=/usr/local/share/gnuradio/grc/blocks
-  ```
-
 - Install blocks that are needed to connect real hardware to gnuradio
 
   ```sh
   brew install gr-osmosdr gr-baz --HEAD
   ```
+
+- Create the `~/.gnuradio/config.conf` config file for custom block support:
+  ```sh
+  mkdir ~/.gnuradio
+  vim ~/.gnuradio/config.conf
+  ```
+  Add these lines into file otherwise gnuradio is unable to locate blocks from `gr-osmosdr` and `gr-baz`:
+  ```ini
+  [grc]
+  local_blocks_path=/usr/local/share/gnuradio/grc/blocks
+  ```
+  `gnuradio-companion` shows lot of duplication warnings after that - this is normal. Everything is installed correctly if `osmocom Source` and `RTL-SDR Source` blocks are available inside GNU Radio Companion.
 
 ### Optional (for hackrf devices)
 
@@ -125,23 +130,15 @@ osmocom_fft -a hackrf
 
 - **gnuradio-companion**
   
-  If gnuradio-companion crashes with following error (it happened with older 3.6.5.1 gnuradio), there must be something wrong with Python. Probably some of the libraries are still using system Python.
+  Probably `gr-baz.rb` is built against System's Python if gnuradio-companion crashes with the following error:
 
   ```sh
   Warning: Block with key "xmlrpc_server" already exists.
-  Ignoring: /usr/local/Cellar/gnuradio/3.6.5.1/share/gnuradio/grc/blocks/xmlrpc_server.xml
+  Ignoring: /usr/local/Cellar/gnuradio/3.7.5.1/share/gnuradio/grc/blocks/xmlrpc_server.xml
   Fatal Python error: PyThreadState_Get: no current thread
   Abort trap: 6
   ```
-
-  To test this theory rename system python to something else and reinstall boost:
-
-  ```sh
-  sudo mv /System/Library/Frameworks/Python.framework/ /System/Library/Frameworks/Backup.Python.framework
-  brew reinstall boost
-  ```
-
-  I got it to work in this way. I have not renamed system Python back to original, however I guess it could be done after this step.
+  I had this error, now it is fixed with [this commit](https://github.com/andresv/homebrew-gnuradio/commit/9f738755a21efefd418c7422d99420a5f3f36998).
 
 - **Uninstall Homebrew**
   If you think you have some cruftiness with Homebrew, this Gist will completely uninstall Homebrew and any libraries it may have installed. Of course if you are using Homebrew for other things you could make a mess of your life. 
