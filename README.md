@@ -4,7 +4,7 @@ This is a collection of [Homebrew](https://github.com/mxcl/homebrew) recipes tha
 
 ## Installation
 
-These steps have been tested on Mavericks 10.9.5 with Apple Command Line Tools 6.1.0.
+These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line Tools 6.1.0.
 
 - Install [Homebrew](http://brew.sh/) if you haven't already
 
