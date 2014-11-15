@@ -2,54 +2,41 @@ require 'formula'
 
 class Gnuradio < Formula
   homepage 'http://gnuradio.org'
-  url  'http://gnuradio.org/releases/gnuradio/gnuradio-3.7.5.tar.gz'
-  sha1 'fe30be815aca149bfac1615028a279aea40c3bbb'
-  head 'http://gnuradio.org/git/gnuradio.git'
-
-  option 'with-qt', 'Build with Qt 4 or 5 support'
-  option 'with-wx', 'Build with WX gui toolkit support'
-  option 'with-zeromq', 'Build with zeromq support'
-  option 'with-docs', 'Build programming documentation(in API documentation) and html man page'
+  url  'http://gnuradio.org/releases/gnuradio/gnuradio-3.7.5.1.tar.gz'
+  sha256 '59f17af762f408a972fc6bd7f823934c743a7657ebd8d3d074ec961f348ae43d'
+  head 'git://gnuradio.org/gnuradio.git'
 
   depends_on 'cmake' => :build
-  depends_on 'Cheetah' => :python
-  depends_on 'lxml' => :python
-  depends_on 'numpy' => :python
   depends_on 'scipy' => :python
-  depends_on 'matplotlib' => :python
-  depends_on 'python'
   depends_on 'boost'
-  depends_on 'gsl'
   depends_on 'fftw'
-  depends_on 'swig' => :build
   depends_on 'pygtk'
-  depends_on 'sdl'
-
-  depends_on 'libusb'
-  depends_on 'orc'
-  depends_on 'pyqt' if build.with? 'qt'
-  depends_on 'pyqwt' if build.with? 'qt'
-  depends_on 'wxpython' if build.with? 'wx'
-  depends_on 'cppzmq' if build.with? 'zeromq'
-  depends_on 'doxygen' if build.with? 'docs'
+  depends_on 'swig'
+  depends_on 'cppunit'
+  depends_on 'pyqt' if ARGV.include?('--with-qt')
+  depends_on 'pyqwt' if ARGV.include?('--with-qt')
+  depends_on 'doxygen' if ARGV.include?('--with-docs')
 
   fails_with :clang do
     build 421
     cause "Fails to compile .S files."
   end
 
-  def patches
-    DATA
+  def options
+    [
+      ['--with-qt', 'Build gr-qtgui.'],
+      ['--with-docs', 'Build docs.'],
+    ]
   end
 
   def install
+    ENV.prepend_create_path 'PYTHONPATH', libexec+'lib/python2.7/site-packages'
+    install_args = [ "setup.py", "install", "--prefix=#{libexec}" ]
 
     mkdir 'build' do
-      args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers"] + std_cmake_args
-      args << '-DENABLE_GR_QTGUI=OFF' if build.without? 'qt'
-      args << '-DENABLE_DOXYGEN=OFF' if build.without? 'docs'
-      args << '-DCMAKE_CXX_FLAGS=-std=c++11 -stdlib=libc++ -Wno-narrowing -Wno-static-float-init'
-      args << '-DCMAKE_CXX_LINK_FLAGS=-stdlib=libc++'
+      args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers", "-DQWT_LIBRARIES=#{HOMEBREW_PREFIX}/lib/qwt.framework/qwt", ] + std_cmake_args
+      args << '-DENABLE_GR_QTGUI=OFF' unless ARGV.include?('--with-qt')
+      args << '-DENABLE_DOXYGEN=OFF' unless ARGV.include?('--with-docs')
 
       # From opencv.rb
       python_prefix = `python-config --prefix`.strip
@@ -81,7 +68,7 @@ class Gnuradio < Formula
   end
 
   def python_path
-    python = Formula['python']
+    python = Formula.factory('python')
     kegs = python.rack.children.reject { |p| p.basename.to_s == '.DS_Store' }
     kegs.find { |p| Keg.new(p).linked? } || kegs.last
   end
@@ -102,19 +89,3 @@ class Gnuradio < Formula
 end
 
 __END__
-diff --git a/gr-fec/lib/cc_decoder_impl.cc b/gr-fec/lib/cc_decoder_impl.cc
-index 20587a2..f0d8cfd 100644
---- a/gr-fec/lib/cc_decoder_impl.cc
-+++ b/gr-fec/lib/cc_decoder_impl.cc
-@@ -147,8 +147,11 @@ namespace gr {
-           d_SUBSHIFT = 0;
-         }
- 
-+#if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
-+        yp_kernel = {{"k=7r=2", volk_8u_x4_conv_k7_r2_8u}};
-+#else
-         yp_kernel = boost::assign::map_list_of("k=7r=2", volk_8u_x4_conv_k7_r2_8u);
--
-+#endif
-         std::string k_ = "k=";
-         std::string r_ = "r=";
