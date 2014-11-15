@@ -9,7 +9,7 @@ These steps have been tested on Mavericks 10.9.5 with Apple Command Line Tools 6
 - Install [Homebrew](http://brew.sh/) if you haven't already
 
   ```sh
-  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   ```
   or if you already have it installed, update and upgrade everything:
   
