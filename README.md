@@ -88,17 +88,13 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   brew install bladerf
   ```
 
-- Install GQRX for just viewing waterfall
+- Install Gqrx for scanning frequencies and viewing waterfall
   
   ```sh
   brew install gqrx --HEAD
+  brew linkapps
   ```
-  
-  To run:
-  
-  ```sh
-  gqrx
-  ```
+Gqrx is installed under Applications and can be started as usual Mac application.
   
 Configure it to use the HackRF. Probably best to start the sample rate at 1000000 until you know how much your system can handle.
 Everything should now be working. It is time to give it a try! Below are some of the programs you can try:
