@@ -52,7 +52,7 @@ These steps have been tested on Mavericks 10.9.5 with Apple Command Line Tools 6
   brew install wxmac --python
   ```
 
-- Install gnuradio 
+- Install gnuradio
 
   ```sh
   brew tap andresv/homebrew-gnuradio
@@ -66,35 +66,32 @@ These steps have been tested on Mavericks 10.9.5 with Apple Command Line Tools 6
   local_blocks_path=/usr/local/share/gnuradio/grc/blocks
   ```
 
-### Optional (for hackrf devices)
-
-- Install `hackrf` and related blocks
+- Install blocks that are needed to connect real hardware to gnuradio
 
   ```sh
-  brew install hackrf --HEAD gr-osmosdr gr-baz --HEAD
+  brew install gr-osmosdr gr-baz --HEAD
   ```
 
-### Optional (for rtl-sdr devices)
+### Optional (for hackrf devices)
 
-- Install `rtlsdr` and related blocks
+- Install `hackrf`
 
   ```sh
-  brew install rtlsdr gr-osmosdr gr-baz --HEAD
+  brew install hackrf --HEAD
   ```
 
 ### Optional (for bladerf devices)
 
-- Install `bladerf` and related blocks
+- Install `bladerf`
 
   ```sh
-  brew install bladerf gr-osmosdr --HEAD
+  brew install bladerf
   ```
 
-- If you want a graphic interface to play with your HackRF, GQRX is great
-  To install it:
+- Install GQRX for just viewing waterfall
   
   ```sh
-  brew install --HEAD gqrx
+  brew install gqrx --HEAD
   ```
   
   To run:
