@@ -6,17 +6,11 @@ class GrOsmosdr < Formula
 
   depends_on 'cmake' => :build
   depends_on 'gnuradio'
-  depends_on 'rtlsdr' => [:optional, 'with-rtlsdr']
-  depends_on 'bladerf' => [:optional, 'with-bladerf']
-
-  option 'with-fcd', 'Build with fcd support'
+  depends_on 'rtlsdr'
 
   def install
     mkdir 'build' do
-      args = std_cmake_args
-      args << "-DENABLE_FCD=OFF" if build.without? 'fcd'
-      args << "-DPYTHON_LIBRARY=#{python_path}/Frameworks/Python.framework/"
-      system 'cmake', '..', *args
+      system 'cmake', '..', *std_cmake_args << "-DPYTHON_LIBRARY=#{python_path}/Frameworks/Python.framework/"
       system 'make'
       system 'make install'
     end
