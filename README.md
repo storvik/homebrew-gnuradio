@@ -46,10 +46,10 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   pip install https://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-1.2.1/matplotlib-1.2.1.tar.gz
   ```
 
-- Install `wxmac` 2.9 with python bindings
+- Install `wxmac` with python bindings
 
   ```sh
-  brew install wxmac --python
+  brew install wxpython
   ```
 
 - Install gnuradio
