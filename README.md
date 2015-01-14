@@ -59,7 +59,17 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   brew install gnuradio --with-qt
   ```
 
-- Install blocks that are needed to connect real hardware to gnuradio
+- [optional] install `hackrf` libraries, so `gr-osmosdr` detects it during build
+  ```sh
+  brew install hackrf --HEAD
+  ```
+  
+- [optional] install `bladerf` libraries, so `gr-osmosdr` detects it during build
+  ```sh
+  brew install bladerf
+  ```
+  
+- Install blocks that are needed to connect real hardware (rtl-sdr, hackrf, bladerf) to gnuradio
 
   ```sh
   brew install gr-osmosdr gr-baz --HEAD
@@ -76,22 +86,6 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   local_blocks_path=/usr/local/share/gnuradio/grc/blocks
   ```
   `gnuradio-companion` shows lot of duplication warnings after that - this is normal. Everything is installed correctly if `osmocom Source` and `RTL-SDR Source` blocks are available inside GNU Radio Companion.
-
-### Optional (for hackrf devices)
-
-- Install `hackrf`
-
-  ```sh
-  brew install hackrf --HEAD
-  ```
-
-### Optional (for bladerf devices)
-
-- Install `bladerf`
-
-  ```sh
-  brew install bladerf
-  ```
 
 - Install Gqrx for scanning frequencies and viewing waterfall
   
