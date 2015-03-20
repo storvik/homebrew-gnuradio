@@ -37,6 +37,12 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   brew install python gcc swig
   ```
 
+- Install command line tools for XCode
+
+  ```sh
+  xcode-select --install
+  ```
+
 - Install the prerequisite python packages
 
   ```sh
