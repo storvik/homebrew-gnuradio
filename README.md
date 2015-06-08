@@ -75,6 +75,11 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   brew install bladerf
   ```
 
+- [optional] install `rtlsdr` libraries, so `gr-osmosdr` detects it during build
+  ```sh
+  brew install rtlsdr --HEAD
+  ```
+
 - Install blocks that are needed to connect real hardware (rtl-sdr, hackrf, bladerf) to gnuradio
 
   ```sh
