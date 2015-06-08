@@ -4,7 +4,7 @@ This is a collection of [Homebrew](https://github.com/mxcl/homebrew) recipes tha
 
 ## Installation
 
-These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line Tools 6.1.0.
+These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line Tools 6.2.
 
 - Install [Homebrew](http://brew.sh/) if you haven't already
 
@@ -12,7 +12,7 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   ```
   or if you already have it installed, update and upgrade everything:
-  
+
   ```sh
   brew update
   brew upgrade
@@ -48,7 +48,7 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   ```sh
   pip install numpy Cheetah lxml
   pip install https://github.com/scipy/scipy/archive/v0.12.0.tar.gz
-  export PKG_CONFIG_PATH="/usr/X11/lib/pkgconfig" 
+  export PKG_CONFIG_PATH="/usr/X11/lib/pkgconfig"
   pip install https://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-1.2.1/matplotlib-1.2.1.tar.gz
   ```
 
@@ -61,7 +61,7 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
 - Install gnuradio
 
   ```sh
-  brew tap andresv/homebrew-gnuradio
+  brew tap storvik/homebrew-gnuradio
   brew install gnuradio --with-qt
   ```
 
@@ -69,12 +69,12 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   ```sh
   brew install hackrf --HEAD
   ```
-  
+
 - [optional] install `bladerf` libraries, so `gr-osmosdr` detects it during build
   ```sh
   brew install bladerf
   ```
-  
+
 - Install blocks that are needed to connect real hardware (rtl-sdr, hackrf, bladerf) to gnuradio
 
   ```sh
@@ -94,13 +94,13 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   `gnuradio-companion` shows lot of duplication warnings after that - this is normal. Everything is installed correctly if `osmocom Source` and `RTL-SDR Source` blocks are available inside GNU Radio Companion.
 
 - Install Gqrx for scanning frequencies and viewing waterfall
-  
+
   ```sh
   brew install gqrx --HEAD
   brew linkapps
   ```
 Gqrx is installed under Applications and can be started as usual Mac application.
-  
+
 Configure it to use the HackRF. Probably best to start the sample rate at 1000000 until you know how much your system can handle.
 Everything should now be working. It is time to give it a try! Below are some of the programs you can try:
 
@@ -116,20 +116,20 @@ osmocom_fft -a hackrf
   If you get the following type of errors installing matplotlib:
 
   > error: expected identifier or '(' before '^' token
-    
+
   Try the following:
-      
+
   ```sh
   export CC=clang
   export CXX=clang++
   export LDFLAGS="-L/usr/X11/lib"
   export CFLAGS="-I/usr/X11/include -I/usr/X11/include/freetype2"
   ```
-      
+
   From [Stackoverflow](http://stackoverflow.com/questions/12363557/matplotlib-install-failure-on-mac-osx-10-8-mountain-lion/15098059#15098059) via [@savant42](https://twitter.com/savant42)
 
 - **gnuradio-companion**
-  
+
   Probably `gr-baz.rb` is built against System's Python if gnuradio-companion crashes with the following error:
 
   ```sh
@@ -141,12 +141,12 @@ osmocom_fft -a hackrf
   I had this error, now it is fixed with [this commit](https://github.com/andresv/homebrew-gnuradio/commit/9f738755a21efefd418c7422d99420a5f3f36998).
 
 - **Uninstall Homebrew**
-  If you think you have some cruftiness with Homebrew, this Gist will completely uninstall Homebrew and any libraries it may have installed. Of course if you are using Homebrew for other things you could make a mess of your life. 
-  
+  If you think you have some cruftiness with Homebrew, this Gist will completely uninstall Homebrew and any libraries it may have installed. Of course if you are using Homebrew for other things you could make a mess of your life.
+
   This [Gist](https://gist.github.com/mxcl/1173223) is from the [Homebrew FAQ](https://github.com/mxcl/homebrew/wiki/FAQ)
-  
+
   Then finish the clean-up with these steps
-  
+
   ```sh
   rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
   rm -rf /Library/Caches/Homebrew
