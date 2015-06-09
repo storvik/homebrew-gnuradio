@@ -2,8 +2,8 @@ require 'formula'
 
 class EttusUhd < Formula
   homepage 'http://www.ettus.com/'
-  url 'https://github.com/EttusResearch/uhd/archive/release_003_007_003.tar.gz'
-  sha1 'bd9ae0dfb2777bca2a22f9e918b707213b35276a'
+  url 'https://github.com/EttusResearch/uhd/archive/release_003_008_004.tar.gz'
+  sha1 'ffe3f95d9b4e4b8bdbd5483e32e4407c'
   version '3.7.3'
   head 'git://github.com/EttusResearch/uhd.git'
 
