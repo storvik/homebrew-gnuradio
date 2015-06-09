@@ -58,10 +58,20 @@ These steps have been tested on Mac OS X Yosemite 10.10 with Apple Command Line 
   brew install wxpython
   ```
 
+- Add homebrew tap
+  ```sh
+  brew tap storvik/homebrew-gnuradio
+  ```
+
+- [optional] install UHD driver (--HEAD can be added to install from [github](https://github.com/EttusResearch/uhd)
+  ```sh
+  brew install ettus-uhd
+  ```
+Note: Has to be done before installing gnuradio.
+
 - Install gnuradio
 
   ```sh
-  brew tap storvik/homebrew-gnuradio
   brew install gnuradio --with-qt
   ```
 
